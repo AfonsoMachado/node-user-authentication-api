@@ -3,41 +3,19 @@ import ForbiddenError from "../errors/forbidden.error";
 import userRespository from "../respositories/user.respository";
 import JWT from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
+import basicAuthMiddleware from "../middlewares/basic-authentication.middleware";
 
 const authorizationRoute = Router();
 
 authorizationRoute.post(
   "/token",
+  basicAuthMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const authorizationHeader = req.headers["authorization"];
-
-      if (!authorizationHeader) {
-        throw new ForbiddenError("Credenciais não informadas");
-      }
-
-      const [authenticationType, token] = authorizationHeader.split(" ");
-
-      // Veficica o tipo da autenticação
-      if (authenticationType !== "Basic" || !token) {
-        throw new ForbiddenError("Tipo de autenticação inválido");
-      }
-
-      const tokenContent = Buffer.from(token, "base64").toString("utf-8");
-
-      const [username, password] = tokenContent.split(":");
-
-      if (!username || !password) {
-        throw new ForbiddenError("Credenciais não preenchidas");
-      }
-
-      const user = await userRespository.findUserByUsernameAndPassword(
-        username,
-        password
-      );
+      const user = req.user;
 
       if (!user) {
-        throw new ForbiddenError("Usuário ou senha inválidos");
+        throw new ForbiddenError("Usuário não informado");
       }
 
       const jwtPayload = { username: user.username };
