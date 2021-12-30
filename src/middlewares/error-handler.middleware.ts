@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import DatabaseError from "../models/errors/database.error.model";
+import DatabaseError from "../errors/database.error.model";
 
 function errorHandler(
   error: any,

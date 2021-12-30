@@ -1,6 +1,6 @@
 import User from "../models/user.mode";
 import db from "../db";
-import DatabaseError from "../models/errors/database.error.model";
+import DatabaseError from "../errors/database.error.model";
 
 class UserRepository {
   async findAllUsers(): Promise<User[]> {
@@ -34,45 +34,57 @@ class UserRepository {
   }
 
   async createUser(user: User): Promise<string> {
-    const script = `
-      INSERT INTO application_user (
-        username,
-        password
-      )
-      VALUES($1, crypt($2, 'my_salt'))
-      RETURNING uuid
-    `;
+    try {
+      const script = `
+        INSERT INTO application_user (
+          username,
+          password
+        )
+        VALUES($1, crypt($2, 'my_salt'))
+        RETURNING uuid
+      `;
 
-    const values = [user.username, user.password];
+      const values = [user.username, user.password];
 
-    const { rows } = await db.query<{ uuid: string }>(script, values);
-    const [newUser] = rows;
-    return newUser.uuid;
+      const { rows } = await db.query<{ uuid: string }>(script, values);
+      const [newUser] = rows;
+      return newUser.uuid;
+    } catch (error) {
+      throw new DatabaseError("Erro ao inserir usuário", error);
+    }
   }
 
   async updateUser(user: User): Promise<void> {
-    const script = `
-    UPDATE application_user
-    SET
-      username = $1,
-      password = crypt($2, 'my_salt')
-    WHERE uuid = $3
-  `;
+    try {
+      const script = `
+      UPDATE application_user
+      SET
+        username = $1,
+        password = crypt($2, 'my_salt')
+      WHERE uuid = $3
+    `;
 
-    const values = [user.username, user.password, user.uuid];
+      const values = [user.username, user.password, user.uuid];
 
-    await db.query(script, values);
+      await db.query(script, values);
+    } catch (error) {
+      throw new DatabaseError("Erro ao atualizar usuário", error);
+    }
   }
 
   async removeUser(uuid: string): Promise<void> {
-    const script = `
-      DELETE
-      FROM application_user
-      WHERE uuid = $1
-    `;
+    try {
+      const script = `
+        DELETE
+        FROM application_user
+        WHERE uuid = $1
+      `;
 
-    const values = [uuid];
-    await db.query(script, values);
+      const values = [uuid];
+      await db.query(script, values);
+    } catch (error) {
+      throw new DatabaseError("Erro ao deletar usuário", error);
+    }
   }
 }
 
