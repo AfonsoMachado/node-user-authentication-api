@@ -21,10 +21,15 @@ usersRoute.get(
   }
 );
 
-usersRoute.post("/users", (req: Request, res: Response, next: NextFunction) => {
-  const newUser = req.body;
-  res.status(StatusCodes.CREATED).send(newUser);
-});
+usersRoute.post(
+  "/users",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const newUser = req.body;
+
+    const uuid = await userRespository.createUser(newUser);
+    res.status(StatusCodes.CREATED).send(uuid);
+  }
+);
 
 usersRoute.put(
   "/users/:uuid",
