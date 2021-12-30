@@ -21,11 +21,8 @@ usersRoute.get(
       const user = await userRespository.findUserById(uuid);
       res.status(StatusCodes.OK).send(user);
     } catch (error) {
-      if (error instanceof DatabaseError) {
-        res.sendStatus(StatusCodes.BAD_REQUEST);
-      } else {
-        res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-      }
+      // passando erro para o error handler
+      next(error);
     }
   }
 );
