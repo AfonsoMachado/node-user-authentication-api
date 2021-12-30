@@ -10,4 +10,5 @@ CREATE TABLE IF NOT EXISTS application_user (
     PRIMARY KEY (uuid)
 );
 
+-- Criação do usuário inicial
 INSERT INTO application_user (username, password) VALUES ('admin', crypt('admin', 'my_salt'));
