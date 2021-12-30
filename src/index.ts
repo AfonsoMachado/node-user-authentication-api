@@ -10,5 +10,5 @@ app.get("/status", (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port, () => {
-  console.log(`API executando na porta ${port}`);
+  console.log(`API executando na porta ${port}!`);
 });
