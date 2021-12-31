@@ -1,4 +1,4 @@
-import User from "../models/user.mode";
+import User from "../models/user.model";
 import db from "../db";
 import DatabaseError from "../errors/database.error";
 
