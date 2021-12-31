@@ -1,0 +1,2 @@
+- Endpoint de refresh token, gerar status 401 quando o token , e chamar o regresh token, gerando um novo token válido
+- Adicionar segredo de autenticação, segredo de senha e url do db em variáveis de ambiente

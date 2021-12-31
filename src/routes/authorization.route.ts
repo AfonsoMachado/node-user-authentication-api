@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import ForbiddenError from "../errors/forbidden.error";
 import userRespository from "../respositories/user.respository";
-import JWT from "jsonwebtoken";
+import JWT, { SignOptions } from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import basicAuthMiddleware from "../middlewares/basic-authentication.middleware";
 import jwtAuthenticationMiddleware from "../middlewares/jwt-authentication.middleware";
@@ -20,7 +20,11 @@ authorizationRoute.post(
       }
 
       const jwtPayload = { username: user.username };
-      const jwtOptions = { subject: user?.uuid };
+      // Token expira em 30 minutos
+      const jwtOptions: SignOptions = {
+        subject: user?.uuid,
+        expiresIn: "30m",
+      };
       const secretKey = "my_secret_key";
       const jwt = JWT.sign(jwtPayload, secretKey, jwtOptions);
 
