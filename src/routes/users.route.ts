@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import userRespository from "../respositories/user.respository";
+import userRespository from "../repositories/user.respository";
 
 const usersRoute = Router();
 

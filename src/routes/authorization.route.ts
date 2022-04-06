@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import ForbiddenError from "../errors/forbidden.error";
-import userRespository from "../respositories/user.respository";
+import userRespository from "../repositories/user.respository";
 import JWT, { SignOptions } from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import basicAuthMiddleware from "../middlewares/basic-authentication.middleware";
